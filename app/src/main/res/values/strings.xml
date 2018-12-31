@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Socializa</string>
+    <string name="facebook_app_id">546518255518718</string>
+    <string name="fb_login_protocol_scheme">fb546518255518718</string>
+    <string name="success">success</string>
+    <string name="cancel">cancel</string>
+    <string name="error">error</string>
+    <string name="login_sucess">Login sucess!</string>
+    <string name="logout">Logout</string>
 </resources>
