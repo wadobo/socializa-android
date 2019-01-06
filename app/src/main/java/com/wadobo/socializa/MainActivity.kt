@@ -3,61 +3,60 @@ package com.wadobo.socializa
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import android.widget.TextView
-import com.facebook.*
-import com.facebook.appevents.AppEventsLogger
+import android.widget.Toast
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import org.json.JSONObject
-import java.util.*
+import java.util.Arrays
+
 
 class MainActivity : Activity() {
-
-    private var callbackManager: CallbackManager? = null
+    private lateinit var callbackManager : CallbackManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppEventsLogger.activateApp(application)
-
         setContentView(R.layout.activity_main)
 
-        // Check token facebook for login
+        val btnFacebook = findViewById<Button>(R.id.btnFacebook)
+        btnFacebook.setOnClickListener {
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"))
+        }
+
+        // Check facebook
         val accessToken = AccessToken.getCurrentAccessToken()
         if (accessToken != null && !accessToken.isExpired) {
             goToLogin()
         }
 
-        val btnLoginFacebook = findViewById<Button>(R.id.btnLoginFacebook)
-        val tag = findViewById<TextView>(R.id.tag)
-
-        btnLoginFacebook.setOnClickListener {
-            // Login
-            callbackManager = CallbackManager.Factory.create()
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"))
-            LoginManager.getInstance().registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(loginResult: LoginResult) {
-                        goToLogin()
+        // Login
+        callbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult> {
+                override fun onSuccess(loginResult: LoginResult) {
+                    if (loginResult.recentlyDeniedPermissions.contains("email")) {
+                        LoginManager.getInstance().logOut()
+                        Toast.makeText(applicationContext, R.string.email_facebook_perms, Toast.LENGTH_LONG).show()
+                        return
                     }
+                    goToLogin()
+                }
 
-                    override fun onCancel() {
-                        tag.text = getString(R.string.cancel)
+                override fun onCancel() {
+                }
 
-                    }
+                override fun onError(error: FacebookException) {
+                }
+            })
 
-                    override fun onError(error: FacebookException) {
-                        tag.text = getString(R.string.error)
-
-                    }
-                })
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        callbackManager?.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
     fun goToLogin() {
