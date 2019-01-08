@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Socializa</string>
+    <string name="email_facebook_perms" translatable="false">El correo es obligatorio para poder guardar sus progresos
+    </string>
+    <string name="client_error" translatable="false">Error en cliente, no autorizado. Inténtelo de nuevo</string>
+    <string name="server_error" translatable="false">Error en servidor: Disculpe las molestias, inténtelo más
+        tarde
+    </string>
+</resources>
