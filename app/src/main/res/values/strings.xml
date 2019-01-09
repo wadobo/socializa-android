@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Socializa</string>
+    <string name="facebook_app_id">546518255518718</string>
+    <string name="fb_login_protocol_scheme">fb546518255518718</string>
+    <string name="email_facebook_perms">Email is required for save your progress</string>
+    <string name="client_error">Client error unauthorized, try again</string>
+    <string name="server_error">Server error: we apologize for the inconveniences, try again later</string>
 </resources>
